@@ -1,8 +1,7 @@
 import React from 'react';
 import {HashRouter, Switch, Route} from 'react-router-dom';
-import Home from "./views/Home";
-import About from "./views/About";
-import './App.css';
+import Login from "./views/login/index";
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -13,8 +12,7 @@ class App extends React.Component {
         return (
             <HashRouter>
                 <Switch>
-                    <Route component={Home} exact path="/" />
-                    <Route component={About} path="/about" />
+                    <Route component={Login} exact path="/"/>
                 </Switch>
             </HashRouter>
         );
