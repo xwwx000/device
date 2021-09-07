@@ -1,6 +1,6 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
-import {Form, Input, Button, Checkbox, Row, Col,message} from 'antd';
+import {Form, Input, Button, Checkbox,message} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import "./index.scss"
 import {LoginInterface} from "../../api/account"
@@ -53,7 +53,7 @@ class Login extends Component {
         LoginInterface(requestData).then(response => {
             const data = response.data;
             console.log(data);
-            if(data.code == 0){
+            if(data.code === 0){
                 message.success('登录成功',1);
                 this.props.history.push("/index")
             }else{

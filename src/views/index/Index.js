@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import {Layout} from 'antd';
 import "./layout.scss"
 const {Sider, Header, Content} = Layout;
