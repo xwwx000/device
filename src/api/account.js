@@ -1,9 +1,8 @@
 import service from "../utils/request";
 /**
  * 登录接口
- */
+*/
 export function LoginInterface(data){
-    console.log("data:" + data.userCode);
     return service.request({
         url:"/platform/account/user/login/",
         method:"POST",

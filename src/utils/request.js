@@ -1,7 +1,7 @@
 import axios from "axios";
 //1.创建实例
 const service = axios.create({
-    baseURL: 'api',
+    baseURL: process.env.REACT_APP_API,
     timeout: 5000,
     headers: {
         token: localStorage.getItem("token"),  // 统一的headers
@@ -9,6 +9,8 @@ const service = axios.create({
 });
 //2.请求拦截
 service.interceptors.request.use(function (config) {
+    console.log(config.url);
+    console.log(config.baseURL);
     // 在发送请求之前做些什么
     return config;
 }, function (error) {

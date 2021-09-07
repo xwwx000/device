@@ -1,21 +1,70 @@
 import React, {Component, Fragment} from 'react';
-import {Form, Input, Button, Checkbox,Row, Col} from 'antd';
+import {withRouter} from 'react-router-dom';
+import {Form, Input, Button, Checkbox, Row, Col,message} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import "./index.scss"
 import {LoginInterface} from "../../api/account"
+
 class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            userCode: "",
+            userPwd: ""
+        };
+    }
+
+    /**
+     * 用户名输入
+     * @param e
+     */
+    inputUserCodeChange = (e) => {
+        let value = e.target.value;
+        this.setState({
+                userCode: value
+            }
+        )
+    }
+    /**
+     * 密码输入
+     * @param e
+     */
+    inputUserPwdChange = (e) => {
+        let value = e.target.value;
+        this.setState({
+                userPwd: value
+            }
+        )
     }
     onFinish = (values) => {
+        if(!this.state.userCode){
+            message.warning('用户名不存在',1);
+            return false;
+        }
+        if(!this.state.userPwd){
+            message.warning('密码不存在',1);
+            return false;
+        }
         //console.log('Received values of form: ', values);
-        LoginInterface(values).then(response=>{
-            console.log(response);
-        }).catch(error=>{
+        const requestData = {
+            userCode: this.state.userCode,
+            userPwd: this.state.userPwd
+        };
+        LoginInterface(requestData).then(response => {
+            const data = response.data;
+            console.log(data);
+            if(data.code == 0){
+                message.success('登录成功',1);
+                this.props.history.push("/index")
+            }else{
+                message.error(data.msg,1);
+                return false;
+            }
+        }).catch(error => {
             console.log(error);
         })
     };
+
     render() {
         return (
             <div className="form-wrap">
@@ -29,12 +78,15 @@ class Login extends Component {
                             className="login-form"
                             initialValues={{remember: true}}
                             onFinish={this.onFinish}>
-                            <Form.Item name="userCode" rules={[{required: true, message: '请输入用户名!'}]}>
-                                <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="用户名"/>
+                            <Form.Item name="userCode">
+                                <Input value={this.state.userCode} onChange={this.inputUserCodeChange}
+                                       prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="用户名"/>
                             </Form.Item>
                             <Form.Item name="userPwd" rules={
+
                                 [
-                                    // {required: true, message: '请输入密码!'},{len: 6, message: '密码长度为6位!'},
+                                     //{required: true, message: '请输入密码!'}
+                                    // ,{len: 6, message: '密码长度为6位!'},
                                     // ({getFieldValue})=>({
                                     //     validator(rule,value){
                                     //         //console.log(getFieldValue('password'));
@@ -46,7 +98,8 @@ class Login extends Component {
                                     //     }
                                     // })
                                 ]}>
-                                <Input prefix={<LockOutlined className="site-form-item-icon"/>} type="password"
+                                <Input value={this.state.userPwd} onChange={this.inputUserPwdChange}
+                                       prefix={<LockOutlined className="site-form-item-icon"/>} type="password"
                                        placeholder="密码"/>
                             </Form.Item>
                             <Form.Item>
@@ -54,23 +107,25 @@ class Login extends Component {
                                     className="span-rmname">记住用户名</span></Checkbox>
                                 </Form.Item>
                             </Form.Item>
+                            {/*<Form.Item>*/}
+                            {/*    <Row gutter={13}>*/}
+                            {/*        <Col className="gutter-row" span={15}>*/}
+                            {/*            <Input prefix={<LockOutlined className="site-form-item-icon"/>} placeholder=""/>*/}
+                            {/*        </Col>*/}
+                            {/*        <Col className="gutter-row" span={9}>*/}
+                            {/*            <Button type="danger" block>获取验证码</Button>*/}
+                            {/*        </Col>*/}
+                            {/*    </Row>*/}
+                            {/*</Form.Item>*/}
                             <Form.Item>
-                                <Row gutter={13}>
-                                    <Col className="gutter-row" span={15}>
-                                        <Input prefix={<LockOutlined className="site-form-item-icon"/>} placeholder=""/>
-                                    </Col>
-                                    <Col className="gutter-row" span={9}>
-                                        <Button type="danger" block>获取验证码</Button>
-                                    </Col>
-                                </Row>
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit" className="login-form-button" block> 登录 </Button>
+                                <Button type="primary" htmlType="submit" className="login-form-button"
+                                        block> 登录 </Button>
                             </Form.Item>
                         </Form>
                     </div>
                 </div>
                 <div className="form-foot">
+                    {/*<Link target="_blank" to="/monitor">大屏幕</Link>*/}
                     版权所有********************公司
                 </div>
             </div>
@@ -78,4 +133,4 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default withRouter(Login);
