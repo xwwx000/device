@@ -3,7 +3,10 @@ import {withRouter} from 'react-router-dom';
 import {Form, Input, Button, Checkbox,message} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import "./index.scss"
+//API
 import {LoginInterface} from "../../api/account"
+//方法
+import {setToken} from "../../utils/session";
 
 class Login extends Component {
     constructor(props) {
@@ -45,7 +48,6 @@ class Login extends Component {
             message.warning('密码不存在',1);
             return false;
         }
-        //console.log('Received values of form: ', values);
         const requestData = {
             userCode: this.state.userCode,
             userPwd: this.state.userPwd
@@ -55,6 +57,8 @@ class Login extends Component {
             console.log(data);
             if(data.code === 0){
                 message.success('登录成功',1);
+                console.log('登录成功 token=: ', data.data.token);
+                setToken(data.data.token);
                 this.props.history.push("/index")
             }else{
                 message.error(data.msg,1);
@@ -102,11 +106,11 @@ class Login extends Component {
                                        prefix={<LockOutlined className="site-form-item-icon"/>} type="password"
                                        placeholder="密码"/>
                             </Form.Item>
-                            <Form.Item>
-                                <Form.Item name="remember" valuePropName="checked" noStyle><Checkbox><span
-                                    className="span-rmname">记住用户名</span></Checkbox>
-                                </Form.Item>
-                            </Form.Item>
+                            {/*<Form.Item>*/}
+                            {/*    <Form.Item name="remember" valuePropName="checked" noStyle><Checkbox><span*/}
+                            {/*        className="span-rmname">记住用户名</span></Checkbox>*/}
+                            {/*    </Form.Item>*/}
+                            {/*</Form.Item>*/}
                             {/*<Form.Item>*/}
                             {/*    <Row gutter={13}>*/}
                             {/*        <Col className="gutter-row" span={15}>*/}

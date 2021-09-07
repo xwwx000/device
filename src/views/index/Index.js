@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {Layout} from 'antd';
 import "./layout.scss"
+import LayerAside from "./componments/Aside"
+import LayerHeader from "./componments/Header";
+import ContainerMain from "../../components/containerMain/Index";
 const {Sider, Header, Content} = Layout;
 
 class Index extends Component {
@@ -12,10 +15,12 @@ class Index extends Component {
     render() {
         return (
             <Layout className="layout-wrap">
-                <Sider width="250px">Sider</Sider>
+                <Header className="layout-header"><LayerHeader/></Header>
                 <Layout>
-                    <Header className="layout-header">头部</Header>
-                    <Content>内容</Content>
+                    <Sider style={{overflowY: 'auto'}} width="250px"><LayerAside></LayerAside></Sider>
+                    <Content className="layout-main">
+                        <ContainerMain />
+                    </Content>
                 </Layout>
             </Layout>
         )
